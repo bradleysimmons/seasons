@@ -13,35 +13,17 @@ const App = () => {
       err => setErrorMessage(err.message)
     );
   }, [])
+
+  let content;
+  if (errorMessage) {
+    content = <div>Error: {errorMessage}</div>;
+  } else if (lat) {
+    content = <SeasonDisplay lat={lat} />;
+  } else {
+    content = <Spinner message="Please accept location request" />;
+  }
+
+  return <div className="border red">{content}</div>
 };
-
-class App extends React.Component {
-  state = { lat: null, errorMessage: '' };
-
-  // called when component is first rendered on screen
-  // initial data loading -- one time
-  componentDidMount() {
-    
-  }
-
-  renderContent() {
-    if (this.state.errorMessage && !this.state.lat) {
-      return <div>error: {this.state.errorMessage}</div>;
-    }
-
-    if (!this.state.errorMessage && this.state.lat) {
-      return <SeasonDisplay lat={this.state.lat} />;
-    }
-
-    return <Spinner message="please allow geo location" />;
-  }
-
-  // react requires render method
-  // keep expensive calls out (only return jsx)
-  // move multiple return statements to helper method (keep conditionals out)
-  render() {
-    return <div className="border red">{this.renderContent()}</div>;
-  }
-}
 
 ReactDOM.render(<App />, document.querySelector('#root'));
